@@ -26,3 +26,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 设置别名简化路径：webpack.base.conf.js -> resolve -> alias
 ## 移动端优化：
 * dependencies: babel-runtime, babel-polyfill, fastclick
+
+#jsonp的实现
+动态创建一个script标签，src指向被请求的服务器地址，地址有个参数callback=a，返回的数据为a()
+前端运行a()就可以获取其中的数据了
