@@ -30,3 +30,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 #jsonp的实现
 动态创建一个script标签，src指向被请求的服务器地址，地址有个参数callback=a，返回的数据为a()
 前端运行a()就可以获取其中的数据了
+
+#后台服务器代理：
+* 请求自己的服务端地址，通过转发解决跨域问题
