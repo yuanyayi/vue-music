@@ -43,7 +43,7 @@
        *    this._initSlider()
        *  }) 
        */
-      setTimeout(()=>{
+      setTimeout(() => {
         this._setSliderWidth()
         this._initDots()
         this._initSlider()
