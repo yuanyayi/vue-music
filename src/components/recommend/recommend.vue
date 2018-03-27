@@ -18,15 +18,16 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <!-- <li @click="selectItem(item)" v-for ="item in discList" class="item">
+            <li @click="selectItem(item)" v-for ="item in discList" class="item">
               <div class="icon">
-                <img width="60" height="60" v-lazy="item.imgurl">
+                <!-- <img width="60" height="60" v-lazy="item.imgurl"> -->
+                <img width="60" height="60" :src="item.imgurl">
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.creator.name"></h2>
                 <p class="desc" v-html="item.dissname"></p>
               </div>
-            </li> -->
+            </li>
           </ul>
         </div>
       </div>
@@ -47,7 +48,8 @@
 	export default {
 		data() {
 			return {
-				recommends: [] 
+				recommends: [] ,
+        discList: []
 			}
 		},
 		components: {
@@ -66,12 +68,12 @@
         })
       },
       _getDiscList() {
-        getDiscList().then((res)=> {
-          if(res.code === ERR_OK) {
-            console.log(res)
+        getDiscList().then((res) => {
+          if (res.code === ERR_OK) {
+            this.discList = res.data.list
           }
         })
-      }
+      },
 		}
 	}
 </script>
