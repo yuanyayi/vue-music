@@ -13,10 +13,6 @@
         type: Number,
         default: 1
       },
-      click: {
-        type: Boolean,
-        default: true
-      },
       data: {
         type: Array,
         dafault: null
@@ -39,7 +35,7 @@
         if(!this.$refs.wrapper) { return }
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
-          click: this.click
+          click: true
         })
       },
       // 对几个方法进行代理
