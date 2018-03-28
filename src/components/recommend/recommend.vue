@@ -29,9 +29,9 @@
           </ul>
         </div>
       </div>
-      <!-- <div class="loading-container" v-show="!discList.length">
+      <div class="loading-container" v-show="!discList.length || !discList.length>0">
         <loading></loading>
-      </div> -->
+      </div>
     </scroll>
     <!-- <router-view></router-view> -->
   </div>
@@ -42,6 +42,7 @@
 	import {ERR_OK} from 'api/config'
 	import Slider from 'base/slider/slider'
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
 
 	export default {
 		data() {
@@ -52,7 +53,8 @@
 		},
 		components: {
 			Slider,
-      Scroll
+      Scroll,
+      Loading
 		},
 		created() {
 			this._getRecommend()
