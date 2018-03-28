@@ -33,3 +33,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 #后台服务器代理：
 * 请求自己的服务端地址，通过转发解决跨域问题
+
+#加载时机问题：
+能确定占位大小的，可以优先加载，参考骨架页面。
+不能确定占位大小的，在内容异步获取成功后再加载。
+如果内容分多次异步获取（图片）不确定时间的，加一个watch => refresh的余地。

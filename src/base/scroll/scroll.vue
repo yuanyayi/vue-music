@@ -26,6 +26,13 @@
       setTimeout(() => {
         this._initScroll()
       },20)
+
+      window.addEventListener('resize', ()=>{
+        if(!this.scroll) {
+          return
+        }
+        this.refresh()
+      })
     },
     methods: {
       _initScroll() {

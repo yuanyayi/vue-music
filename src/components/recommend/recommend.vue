@@ -1,14 +1,14 @@
 <template>
   <div class="recommend" ref="recommend">
-    <scroll ref="scroll" class="recommend-content" :data="discList">
+    <scroll ref="scroll" class="recommend-content" :data="recommends">
+      <!-- 这里如果使用recommend数据，那么渲染的时间会提前，可能会造成滚动不到底 -->
       <div>
         <div v-if="recommends.length>0" class="slider-wrapper">
           <div class="slider-content">
             <slider ref="slider">
               <div v-for="item in recommends">
                 <a :href  ="item.linkUrl">
-                	<!-- @load="loadImage" -->
-                  <img :src="item.picUrl">
+                  <img @load="loadImage" :src="item.picUrl">
                 </a>
               </div>
             </slider>
@@ -47,8 +47,8 @@
 	export default {
 		data() {
 			return {
-				recommends: [] ,
-        discList: []
+				recommends: [],
+        discList: [],
 			}
 		},
 		components: {
@@ -74,6 +74,12 @@
           }
         })
       },
+      loadImage() {
+        if(this.checkloaded) return
+          console.log('slider refresh')
+        this.$refs.scroll.refresh()
+        this.checkloaded = true
+      }
 		}
 	}
 </script>
