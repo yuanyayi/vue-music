@@ -19,7 +19,6 @@ export function getRecommend() {
 
 // 获取歌单数据
 export function getDiscList() {
-  // 线上环境地址，同学们根据自己的需要配置修改
   // const url = debug ? '/api/getDiscList' : 'http://ustbhuangyi.com/music/api/getDiscList'
   const url = '/api/getDiscList'
 

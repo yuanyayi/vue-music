@@ -7,11 +7,11 @@
 * 给eslintrc.js 添加新规则
 * 设置别名简化路径：webpack.base.conf.js -> resolve -> alias
 
-## 关于代码组织方式：
-这个项目分为通用组件(base)、通用资源和接口配置(common)、各个组件(components)、各个api(api)。
-
 ### 移动端优化：
 * dependencies: babel-runtime, babel-polyfill, fastclick
+
+## 关于代码组织方式：
+这个项目分为通用组件(base)、通用资源和接口配置(common)、各个组件(components)、各个api(api)。
 
 ## jsonp的实现
 动态创建一个script标签，src指向被请求的服务器地址，地址有个参数callback=a，返回的数据为a()
