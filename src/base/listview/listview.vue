@@ -1,5 +1,9 @@
 <template>
-  <scroll class="listview" :data="data" ref="listview">
+  <scroll class="listview" ref="listview"
+          :data="data" 
+          :listenScroll="listenScroll"
+          :probeType="probeType"
+          @scroll="scroll">
     <ul>
       <li v-for="group in data" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
@@ -12,9 +16,10 @@
       </li>
     </ul>
     <!-- 右侧边栏 -->
-    <div class="list-shortcut" @touchstart="onShortcutTouchStart">
+    <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
       <ul>
-        <li v-for="(item,index) in shortcutList" class="item" :data-index="index">
+        <li v-for="(item,index) in shortcutList" class="item" :data-index="index" 
+            :class="{'current': currentIndex===index}">
           {{item}}
         </li>
       </ul>
@@ -26,11 +31,28 @@
   import Scroll from 'base/scroll/scroll'
   import {getData} from 'common/js/dom'
 
+  // shortcut单个元素的高度：
+  const ANCHOR_HEIGHT = 18
+
   export default {
+    created() {
+      // 为什么写这里而不写在data中？因为不需要Vue为它做监听。
+      this.touch = {}
+      this.listenScroll = true
+      this.listHeight = []
+      this.probeType = 3
+    },
     props: {
       data: {
         type: Array,
         dafault: []
+      }
+    },
+    data(){
+      return {
+        // shortcut highlight
+        scrollY: -1,
+        currentIndex: 0
       }
     },
     computed: {
@@ -40,13 +62,76 @@
         })
       }
     },
+    watch: {
+      data() {
+        // 数据变化->DOM变化会有延时
+        setTimeout(()=>{
+          this._calculateHeight()
+        }, 20);
+      },
+      scrollY(newY) {
+        // scroll事件是在scroll组件中重新派发的
+        const listHeight = this.listHeight
+        for(let i = 0; i < listHeight.length; i++) {
+          let height1 = listHeight[i] //下限
+          let height2 = listHeight[i+1] //上限
+          if(-newY < 0) {
+            this.currentIndex = 0
+            return
+          }
+          if(!height2 || (-newY >= height1 && -newY < height2)) {
+            this.currentIndex = i
+            return
+          }
+        }
+        this.currentIndex = 0
+      }
+    },
     components: {
       Scroll
     },
     methods:{
       onShortcutTouchStart(e) {
-        let checkedIndex = getData(e.target, 'index')
-        this.$refs.listview.scroll.scrollToElement(this.$refs.listGroup[checkedIndex], 0)
+        let anchorIndex = getData(e.target, 'index')
+
+        let firstTouch = e.touches[0]
+        // 这是一个给TouchMove做起点的变量。为了能让另一个方法共享到这个数值，需要做成listview的全局变量
+        this.touch.y1= firstTouch.pageY
+        this.touch.anchorIndex = anchorIndex
+
+        this._scrollTo(anchorIndex)
+      },
+      onShortcutTouchMove(e) {
+        // 起始触摸位置，移动y值距离，计算最终位置
+        let firstTouch = e.touches[0]
+        this.touch.y2 = firstTouch.pageY
+        let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0
+        // Tip: num | 0 == Math.floor(num)
+        let anchorIndex = parseInt(this.touch.anchorIndex) + delta
+
+        this._scrollTo(anchorIndex)
+      },
+      scroll(pos){
+        // 滚动时更新位置。计算标准。
+        this.scrollY = pos.y
+      },
+      _scrollTo(index){
+        this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
+        // 商品列表左右联动？
+      },
+      _calculateHeight() {
+        // 如果列表DOM发生变化，那么需要重新计算各个DOM元素的高度。
+        this.listHeight = []
+        const list = this.$refs.listGroup
+        // 遍历获取元素高度：
+        let height = 0
+        this.listHeight.push(height)
+        // 对于每个listGroup计算高度
+        for(let i = 0; i < list.length; i++){
+          let item = list[i]
+          height += item.clientHeight
+          this.listHeight.push(height)
+        }
       }
     }
   }

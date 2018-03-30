@@ -9,7 +9,7 @@ import Singer from 'components/singer/singer'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash', // history
   routes: [{
       path: '/',
       redirect: '/recommend'

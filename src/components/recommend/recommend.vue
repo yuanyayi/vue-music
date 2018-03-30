@@ -77,7 +77,6 @@
       },
       loadImage() {
         if(this.checkloaded) return
-          console.log('slider refresh')
         this.$refs.scroll.refresh()
         this.checkloaded = true
       }
