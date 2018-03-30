@@ -28,3 +28,9 @@
 ## vue-lazyload插件：
 vue-lazyload: [https://github.com/hilongjw/vue-lazyload](https://github.com/hilongjw/vue-lazyload)
 在main.js中引用并设置，就可以使用v-lazy命令了。
+
+## 左右联动的思路：
+ 1 左侧生成一张完整的位置表，右侧生成一组对应的索引值
+ 2 当左侧滚动或右侧点击时，提供位置参数给统一的处理函数
+ 3 处理函数会将提供的参数输出为同一位置的位移和索引值
+ 4 两侧根据位移和索引值作出表现

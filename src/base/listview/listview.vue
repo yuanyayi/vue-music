@@ -19,7 +19,7 @@
     <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
       <ul>
         <li v-for="(item,index) in shortcutList" class="item" :data-index="index" 
-            :class="{'current': currentIndex===index}">
+            :class="{'current': currentIndex === index}">
           {{item}}
         </li>
       </ul>
@@ -92,13 +92,13 @@
     },
     methods:{
       onShortcutTouchStart(e) {
-        let anchorIndex = getData(e.target, 'index')
+        let anchorIndex = parseInt(getData(e.target, 'index'))
 
         let firstTouch = e.touches[0]
         // 这是一个给TouchMove做起点的变量。为了能让另一个方法共享到这个数值，需要做成listview的全局变量
         this.touch.y1= firstTouch.pageY
         this.touch.anchorIndex = anchorIndex
-
+        
         this._scrollTo(anchorIndex)
       },
       onShortcutTouchMove(e) {
@@ -116,6 +116,8 @@
         this.scrollY = pos.y
       },
       _scrollTo(index){
+        // 增加按照index设定scrollY的代码：
+        this.scrollY = -this.listHeight[index]
         this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
         // 商品列表左右联动？
       },
