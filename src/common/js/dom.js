@@ -10,3 +10,13 @@ export function hasClass(el, className) {
   let reg = new RegExp('(^|\\s)' + className + '(\\s|$)')
   return reg.test(el.className)
 }
+
+export function getData(el, name, val) {
+  const prefix = 'data-'
+  const attr_name = prefix + name
+  if(val){
+    return el.setAttribute(attr_name, val)
+  }else{
+    return el.getAttribute(attr_name)
+  }
+}

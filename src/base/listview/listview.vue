@@ -1,7 +1,7 @@
 <template>
-  <scroll class="listview" :data="data">
+  <scroll class="listview" :data="data" ref="listview">
     <ul>
-      <li v-for="group in data" class="list-group">
+      <li v-for="group in data" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
           <li v-for="item in group.items" class="list-group-item">
@@ -14,8 +14,8 @@
     <!-- 右侧边栏 -->
     <div class="list-shortcut" @touchstart="onShortcutTouchStart">
       <ul>
-        <li>
-          
+        <li v-for="(item,index) in shortcutList" class="item" :data-index="index">
+          {{item}}
         </li>
       </ul>
     </div>
@@ -24,6 +24,7 @@
 
 <script type="text/javascript">
   import Scroll from 'base/scroll/scroll'
+  import {getData} from 'common/js/dom'
 
   export default {
     props: {
@@ -32,12 +33,20 @@
         dafault: []
       }
     },
+    computed: {
+      shortcutList() {
+        return this.data.map((group)=>{
+          return group.title.substr(0,1)
+        })
+      }
+    },
     components: {
       Scroll
     },
     methods:{
       onShortcutTouchStart(e) {
-        
+        let checkedIndex = getData(e.target, 'index')
+        this.$refs.listview.scroll.scrollToElement(this.$refs.listGroup[checkedIndex], 0)
       }
     }
   }
