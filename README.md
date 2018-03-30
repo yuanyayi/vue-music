@@ -1,6 +1,7 @@
 # vue-music
 
 > 一个基于Vue全家桶的音乐播放器
+> 学会基本的Vue数据操作，扩展一些常用的配合Vue的插件。
 
 ## 安装：
 * dependencies: stylus, stylus-loader
@@ -34,3 +35,6 @@ vue-lazyload: [https://github.com/hilongjw/vue-lazyload](https://github.com/hilo
  2 当左侧滚动或右侧点击时，提供位置参数给统一的处理函数
  3 处理函数会将提供的参数输出为同一位置的位移和索引值
  4 两侧根据位移和索引值作出表现
+
+## 固定标题的需求：
+  写一个新的标题固定在指定的位置上。
