@@ -1,7 +1,9 @@
 <template>
-  <div class="singer-detail">
-    这是一段文字
-  </div>
+  <transition name="slide">
+    <div class="singer-detail">
+      这是一段文字
+    </div>
+</transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -19,4 +21,14 @@
     right: 0
     bottom: 0
     background: $color-background
+    
+  /* 转场动画
+   * 官方文档中的描述： https://cn.vuejs.org/v2/guide/transitions.html
+   * vue中提供了transition封装组件
+   */
+  .slide-enter-active, .slide-leave-active
+    transition: all 0.3s
+    
+  .slide-enter,.slide-leave-to
+    transform: translate3d(100%, 0, 0)
 </style>

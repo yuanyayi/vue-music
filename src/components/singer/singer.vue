@@ -30,6 +30,7 @@
     },
     methods:{
       selectSinger(singer) {
+        // 路由跳转
         this.$router.push({
           path: `/singer/${singer.id}`
         })
