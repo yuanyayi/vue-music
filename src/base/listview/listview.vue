@@ -4,7 +4,7 @@
       <li v-for="group in data" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li v-for="item in group.items" class="list-group-item">
+          <li v-for="item in group.items" class="list-group-item" @click="selectItem(item)">
             <img class="avatar" v-lazy="item.avatar" />
             <span class="name">{{item.name}}</span>
           </li>
@@ -114,6 +114,13 @@ export default {
     Loading
   },
   methods: {
+    // 因为是通用组件，所以组件内部只负责派发出事件，具体逻辑交给外部实现。
+    // 转发给了外部select事件
+    selectItem(item) {
+      this.$emit('select', item)
+      // 等价于外部onselect = handler(item)
+    },
+    // 右侧索引
     onShortcutTouchStart(e) {
       let anchorIndex = parseInt(getData(e.target, 'index'))
 
