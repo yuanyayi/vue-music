@@ -1,5 +1,5 @@
 <template>
-  <transition name="slide">
+  <transition name="myslide">
     <div class="singer-detail">
       这是一段文字
     </div>
@@ -12,7 +12,7 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
-  
+  // 最终展示的位置
   .singer-detail
     position: fixed
     z-index: 100
@@ -26,9 +26,9 @@
    * 官方文档中的描述： https://cn.vuejs.org/v2/guide/transitions.html
    * vue中提供了transition封装组件
    */
-  .slide-enter-active, .slide-leave-active
+  .myslide-enter-active, .myslide-leave-active
     transition: all 0.3s
-    
-  .slide-enter,.slide-leave-to
+  // 初始位置
+  .myslide-enter,.myslide-leave-to
     transform: translate3d(100%, 0, 0)
 </style>
