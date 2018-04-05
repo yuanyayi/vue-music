@@ -1,7 +1,9 @@
 <template>
   <transition name="myslide">
     <div class="singer-detail">
-      
+      <li v-for="song in songs">
+        <a :href="song.url">{{song.name}}</a>
+      </li>
     </div>
   </transition>
 </template>
@@ -36,16 +38,20 @@ export default {
       }
       getSingerDetails(this.singer.id).then((res)=>{
         if(res.code === ERR_OK) {
-          this._normalizeSongs(res.data.list)
+          this.songs = this._normalizeSongs(res.data.list)
         }
       })
     },
     _normalizeSongs(list) {
       list.forEach((song,index)=>{
-        if(song.musicData.songid && song.musicData.albummid){
-          this.songs.push(createSong(song.musicData))
+        let result = []
+        // ES6特性-解构赋值：当属性名与变量名一致时，可以简写：
+        let {musicData} = item
+        if(musicData.songid && musicData.albummid){
+          result.push(createSong(musicData))
         }
       })
+      return result
     }
   }
 }
