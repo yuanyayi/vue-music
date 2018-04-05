@@ -1,15 +1,56 @@
 <template>
   <transition name="myslide">
     <div class="singer-detail">
-      这是一段文字
+      
     </div>
-</transition>
+  </transition>
 </template>
-
 <script type="text/ecmascript-6">
-  
-</script>
+import { mapGetters } from 'vuex'
+// mapGetters: 语法糖，vuex自带，数组
+import {getSingerDetails} from 'api/singer'
+import {ERR_OK} from 'api/config'
+import {createSong} from 'common/js/song'
 
+export default {
+  data (){
+    return {
+      songs: []
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'singer' // 刷新页面就没有了
+    ])
+  },
+  created() {
+    this._getSingerDetails((res)=>{
+      console.log(res.data)
+    })
+  },
+  methods: {
+    _getSingerDetails(){
+      if(!this.singer.id) {
+        this.$router.push('/singer')
+        return
+      }
+      getSingerDetails(this.singer.id).then((res)=>{
+        if(res.code === ERR_OK) {
+          this._normalizeSongs(res.data.list)
+        }
+      })
+    },
+    _normalizeSongs(list) {
+      list.forEach((song,index)=>{
+        if(song.musicData.songid && song.musicData.albummid){
+          this.songs.push(createSong(song.musicData))
+        }
+      })
+    }
+  }
+}
+
+</script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   // 最终展示的位置

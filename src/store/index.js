@@ -20,5 +20,5 @@ export default new Vuex.Store({
   state,
   mutations,
   strict: debug, // 严格模式
-  plugins: debug ? [createLogger()] : [] // 插件
+  plugins: debug ? [createLogger()] : [] // 插件(数组)
 })
