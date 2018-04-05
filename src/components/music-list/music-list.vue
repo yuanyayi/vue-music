@@ -5,10 +5,10 @@
     </div>
     <h1 class="title">{{title}}</h1>
     <div class="bg-image">
-      <div class="filter" :style="'background-image: url(\''+bgImage+'\')'">
+      <div class="filter" :style="'background-image: url(\''+bgImage+'\')'" ref="bgImage">
       </div>
     </div>
-    <scroll class="list" :data="songs">
+    <scroll class="list" :data="songs" ref="list">
       <div class="song-list-wrapper">
         <song-list :songs="songs"></song-list>
       </div>
@@ -43,6 +43,9 @@ export default {
     goBack() {
       this.$emit('click')
     }
+  },
+  mounted() {
+    this.$refs.list.$el.style.top = `$(this.$refs.bgImage.clientHeight)`
   }
 }
 
