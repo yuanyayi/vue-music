@@ -49,7 +49,6 @@ export default class Song {
       if (res.code === ERR_OK) {
         const vkey = res.data.items[0].vkey
         this.url = `http://dl.stream.qqmusic.qq.com/${this.filename}?vkey=${vkey}&guid=${getUid()}&uin=0&fromtag=66`
-        console.log(this.url)
         urlMap[this.id] = this.url
       }
     })

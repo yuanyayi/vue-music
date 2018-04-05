@@ -1,10 +1,6 @@
 <template>
   <transition name="myslide">
-    <div class="singer-detail">
-      <li v-for="song in songs">
-        <a :href="song.url">{{song.name}}</a>
-      </li>
-    </div>
+    <music-list :bg-image="bgImage" :songs="songs" :title="title"></music-list>
   </transition>
 </template>
 <script type="text/ecmascript-6">
@@ -14,21 +10,30 @@ import {getSingerDetails} from 'api/singer'
 import {ERR_OK} from 'api/config'
 import {createSong} from 'common/js/song'
 
+import MusicList from 'components/music-list/music-list'
+
 export default {
   data (){
     return {
-      songs: []
+      songs: [],
     }
   },
   computed: {
     ...mapGetters([
       'singer' // 刷新页面就没有了
-    ])
+    ]),
+    title() {
+      return this.singer.name
+    },
+    bgImage() {
+      return this.singer.avatar
+    }
+  },
+  components: {
+    MusicList
   },
   created() {
-    this._getSingerDetails((res)=>{
-      console.log(res.data)
-    })
+    this._getSingerDetails()
   },
   methods: {
     _getSingerDetails(){
@@ -43,8 +48,8 @@ export default {
       })
     },
     _normalizeSongs(list) {
-      list.forEach((song,index)=>{
-        let result = []
+      let result = []
+      list.forEach((item,index)=>{
         // ES6特性-解构赋值：当属性名与变量名一致时，可以简写：
         let {musicData} = item
         if(musicData.songid && musicData.albummid){
