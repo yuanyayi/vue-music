@@ -48,11 +48,22 @@ export default {
   },
   watch: {
     scrollY(newVal) {
-      let translateY = Math.max(this.minTranslateY, newVal)
       // scroll for bg-layer：
+      let translateY = Math.max(this.minTranslateY, newVal)
       this.$refs.layer.style['transform'] = `translate3d(0, ${translateY}px, 0)`
       this.$refs.layer.style['webkitTransform'] = `translate3d(0, ${translateY}px, 0)`
       // scroll for bg-layer (end)
+      // 解决song-list会滑出bg-layer上限的问题(不能使用overflow好痛苦TOT)
+      let zIndex = 0
+      if (newVal < this.minTranslateY) {
+        zIndex = 10
+        this.$refs.bgImage.style.paddingTop = 0
+        this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
+      } else {
+        this.$refs.bgImage.style.paddingTop = '70%' 
+        this.$refs.bgImage.style.height = 0
+      }
+      this.$refs.bgImage.style.zIndex = zIndex
     }
   },
   created() {
