@@ -5,7 +5,7 @@
     </div>
     <h1 class="title">{{title}}</h1>
     <div class="bg-image" :style="'background-image: url(\''+bgImage+'\')'" ref="bgImage">
-      <div class="filter"></div>
+      <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
     <scroll class="list" @scroll="scroll" :data="songs" ref="list" :probe-type="probeType" :listen-scroll="listenScroll">
@@ -53,6 +53,7 @@ export default {
       this.$refs.layer.style['transform'] = `translate3d(0, ${translateY}px, 0)`
       this.$refs.layer.style['webkitTransform'] = `translate3d(0, ${translateY}px, 0)`
       // scroll for bg-layer (end)
+
       // 解决song-list会滑出bg-layer上限的问题(不能使用overflow好痛苦TOT)
       let zIndex = 0
       if (newVal < this.minTranslateY) {
@@ -63,7 +64,26 @@ export default {
         this.$refs.bgImage.style.paddingTop = '70%' 
         this.$refs.bgImage.style.height = 0
       }
+      // this.$refs.bgImage.style.zIndex = zIndex
+      // 解决song-list会滑出bg-layer上限的问题(END)
+
+      // 下拉song-list时头图放大功能：
+      let scale = 1
+      let blur = 0
+      const percent = Math.abs(newVal / this.imageHeight)
+      if (newVal > 0){
+        scale = 1 + percent
+        zIndex = 10
+      } else {
+        blur = Math.min(20 * percent, 20)
+      }
+      this.$refs.bgImage.style['transform'] = `scale(${scale})`
+      this.$refs.bgImage.style['webkitTransform'] = `scale(${scale})`
       this.$refs.bgImage.style.zIndex = zIndex
+      // 下拉song-list时头图放大功能(END)
+      // 模糊效果：
+      this.$refs.filter.style['backdrop-filter'] = `blur(${blur}px)`
+      this.$refs.filter.style['webkitBackdrop-filter'] = `blur(${blur}px)`
     }
   },
   created() {
