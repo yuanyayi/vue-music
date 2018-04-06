@@ -1,24 +1,25 @@
 <template>
   <div class="music-list">
-    <div class="back" @click="goBack">
+    <div class="back">
       <i class="icon-back"></i>
     </div>
     <h1 class="title">{{title}}</h1>
-    <div class="bg-image">
-      <div class="filter" :style="'background-image: url(\''+bgImage+'\')'" ref="bgImage">
-      </div>
+    <div class="bg-image" :style="'background-image: url(\''+bgImage+'\')'" ref="bgImage">
+      <div class="filter"></div>
     </div>
-    <scroll class="list" :data="songs" ref="list">
+    <div class="bg-layer" ref="layer"></div>
+    <scroll class="list" @scroll="scroll" :data="songs" ref="list" :probe-type="probeType" :listen-scroll="listenScroll">
       <div class="song-list-wrapper">
         <song-list :songs="songs"></song-list>
       </div>
     </scroll>
   </div>
 </template>
-
 <script type="text/ecmascript-6">
 import Scroll from 'base/scroll/scroll'
 import SongList from 'base/song-list/song-list'
+
+const RESERVED_HEIGHT = 40
 
 export default {
   props: {
@@ -35,22 +36,48 @@ export default {
       default: ''
     }
   },
+  data() {
+    return {
+      scrollY: 0 // 参照变量
+    }
+  },
+  methods: {
+    scroll(pos) {
+      this.scrollY = pos.y
+    },
+  },
+  watch: {
+    scrollY(newVal) {
+      let translateY = Math.max(this.minTranslateY, newVal)
+      // scroll for bg-layer：
+      this.$refs.layer.style['transform'] = `translate3d(0, ${translateY}px, 0)`
+      this.$refs.layer.style['webkitTransform'] = `translate3d(0, ${translateY}px, 0)`
+      // scroll for bg-layer (end)
+    }
+  },
+  created() {
+    this.probeType = 3
+    this.listenScroll = true
+  },
+  mounted() {
+    /* 
+     *  scroll组件默认全屏，会覆盖整个music-list范围；
+     *  music-list是伪全屏，必须全屏；
+     *  所以解决方法是：list组件初始位置需要下移，让出头图位置；
+     *  （根据需求）滚动时头图位置重新计算，跟随list 组件上移。
+     */
+    this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px`
+    // 其实如果背景图是全屏这样就可以了～～～
+    this.imageHeight = this.$refs.bgImage.clientHeight
+    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
+  },
   components: {
     Scroll,
     SongList
-  },
-  methods: {
-    goBack() {
-      this.$emit('click')
-    }
-  },
-  mounted() {
-    this.$refs.list.$el.style.top = `$(this.$refs.bgImage.clientHeight)`
   }
 }
 
 </script>
-
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
@@ -121,7 +148,7 @@ export default {
         left: 0
         width: 100%
         height: 100%
-        background: rgba(7, 17, 27, 0.4) no-repeat center
+        background: rgba(7, 17, 27, 0.4)
     .bg-layer
       position: relative
       height: 100%
@@ -132,11 +159,14 @@ export default {
       bottom: 0
       width: 100%
       background: $color-background
+      // overflow: hidden
       .song-list-wrapper
         padding: 20px 30px
+        // 测试用
+        // background: $color-background
       .loading-container
         position: absolute
         width: 100%
         top: 50%
         transform: translateY(-50%)
-</style>s
+</style>
